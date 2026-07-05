@@ -1,39 +1,42 @@
-from flask import Flask, request, jsonify
-import joblib
-import numpy as np
-import pandas as pd
+from flask import Flask, request, jsonify 
+import joblib 
+import numpy as np 
+import pandas as pd 
 
-app=Flask(__name__)
+app = Flask(__name__)
 
-model = joblib.load("model/model.pkl")
+# load the trained/saved model 
+model = joblib.load('model/model.pkl')
 
-class_names = {0: 'setosa', 1: 'versicolor', 2: 'virginica'}
-
+# Map the numeric predictions to species name 
+class_map = {0: 'Setosa', 1: 'Versicolor', 2: 'Virginica'}
 
 @app.route('/')
 def home():
-    return "Welcome to the Iris Flower Prediction API!"
+    return "🌼 Flask API for Iris model is running!"
 
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
         data = request.get_json()
-        features = np.array(data['features']).reshape(1, -1)
-        feature_names=['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
 
+        # Extract features
+        features = np.array(data['features']).reshape(1, -1)
+        feature_names = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
         df = pd.DataFrame(features, columns=feature_names)
 
+        # Make prediction
         prediction = int(model.predict(df)[0])
         probabilities = model.predict_proba(df)[0]
-        print(probabilities)
-        result = {
+
+        return jsonify({
             'prediction': prediction,
-            'label': class_names[prediction],
-            'probabilities': {class_names[i]: float(prob) for i, prob in enumerate(probabilities)}
-        }
-        print(result)
-        return jsonify(result)
+            'label': class_map[prediction],
+            'probabilities': {class_map[i]: float(prob) for i, prob in enumerate(probabilities)}
+        })
+
     except Exception as e:
         return jsonify({'error': str(e)})
-if __name__ == '__main__':
+    
+if __name__  == '__main__':
     app.run(debug=True)
