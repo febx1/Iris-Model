@@ -1,17 +1,15 @@
-# 🌸 Iris Species Classifier
+# 🌸 Iris Flower Species Classifier
 
 <div align="center">
 
-**A complete MLOps pipeline for classifying Iris flower species with interactive visualization**
+**A two-tier ML web application — Streamlit frontend + Flask API backend — for real‑time Iris species prediction**
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white&style=for-the-badge)
-![scikit-learn](https://img.shields.io/badge/scikit--learn-1.3%2B-green?logo=scikit-learn&logoColor=white&style=for-the-badge)
-![Streamlit](https://img.shields.io/badge/Streamlit-1.28%2B-red?logo=streamlit&logoColor=white&style=for-the-badge)
-![Plotly](https://img.shields.io/badge/Plotly-5.18%2B-blue?logo=plotly&logoColor=white&style=for-the-badge)
-
-![License](https://img.shields.io/github/license/your-org/iris-model?style=flat-square)
-![Last Commit](https://img.shields.io/github/last-commit/your-org/iris-model?style=flat-square)
-![Issues](https://img.shields.io/github/issues/your-org/iris-model?style=flat-square)
+![Flask](https://img.shields.io/badge/Flask-000000?logo=flask&logoColor=white&style=for-the-badge)
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?logo=streamlit&logoColor=white&style=for-the-badge)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?logo=scikit-learn&logoColor=white&style=for-the-badge)
+![Plotly](https://img.shields.io/badge/Plotly-3F4F75?logo=plotly&logoColor=white&style=for-the-badge)
+![RandomForest](https://img.shields.io/badge/Model-RandomForest-success?style=for-the-badge)
 
 </div>
 
@@ -19,53 +17,34 @@
 
 ## 📑 Table of Contents
 
-| Section | Description |
-|---------|-------------|
-| [🚀 Overview](#-overview) | What this project does |
-| [✨ Features](#-features) | Key capabilities |
-| [🏗️ Architecture](#-architecture) | System design & components |
-| [⚙️ Prerequisites](#-prerequisites) | Required software & versions |
-| [🛠️ Installation](#-installation) | Setup instructions |
-| [📊 Data](#-data) | Dataset information |
-| [🤖 Model](#-model) | Model details |
-| [🎓 Training](#-training) | How to train the model |
-| [📈 Evaluation](#-evaluation) | Performance metrics |
-| [🖥️ Demo](#-demo) | Running the application |
-| [⚙️ Configuration](#-configuration) | Config options |
-| [📁 Project Structure](#-project-structure) | File organization |
-| [🤝 Contributing](#-contributing) | How to contribute |
-| [📜 License](#-license) | Licensing info |
+| # | Section |
+|---|---------|
+| 1 | [🧠 Overview](#-overview) |
+| 2 | [🏗️ Architecture](#-architecture) |
+| 3 | [📁 Project Structure](#-project-structure) |
+| 4 | [✨ Features](#-features) |
+| 5 | [🛠️ Installation](#-installation) |
+| 6 | [🚀 Usage](#-usage) |
+| 7 | [📊 Data](#-data) |
+| 8 | [🤖 Model](#-model) |
+| 9 | [🎓 Training Pipeline](#-training-pipeline) |
+| 10 | [🔌 API Reference](#-api-reference) |
+| 11 | [📈 Evaluation](#-evaluation) |
+| 12 | [📜 License](#-license) |
 
 ---
 
-## 🚀 Overview
+## 🧠 Overview
 
-This repository contains a complete **MLOps pipeline** for:
+This project implements a machine learning pipeline that trains a classifier on the classic Iris dataset and exposes it through a modern two‑tier web architecture:
 
-| Component | Technology | Purpose |
-|-----------|------------|---------|
-| 🧠 **Model Training** | scikit-learn SVM | Classify Iris species with 96%+ accuracy |
-| 🌐 **Web Interface** | Streamlit | Interactive prediction UI |
-| 📊 **Visualization** | Plotly | Real-time probability charts |
-| 🐳 **Deployment** | Docker | Containerized, reproducible environments |
-| 🔧 **Config** | YAML | Centralized settings management |
+| Tier | Technology | Role |
+|------|------------|------|
+| 🎨 **Frontend** | Streamlit + Plotly | User interface with sliders & probability charts |
+| ⚙️ **Backend** | Flask REST API | Serves model predictions via `/predict` |
+| 🧠 **Model** | Random Forest (scikit-learn) | Classifies flowers into 3 species |
 
----
-
-## ✨ Features
-
-<div align="center">
-
-| Feature | Benefit |
-|---------|---------|
-| 🎯 **High Accuracy** | ~96% test accuracy with RBF kernel SVM |
-| 📈 **Interactive Charts** | Plotly bar graphs show prediction confidence |
-| 🖱️ **User-Friendly UI** | Simple form input with instant results |
-| 🔄 **Batch API** | REST endpoint for multiple predictions |
-| 🐳 **One-Click Deploy** | Docker Compose for instant setup |
-| ⚙️ **Flexible Config** | YAML + environment variable overrides |
-
-</div>
+**Prediction flow:** User adjusts sliders → Streamlit sends JSON to Flask → Flask runs inference → Probability bar chart rendered
 
 ---
 
@@ -73,263 +52,246 @@ This repository contains a complete **MLOps pipeline** for:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        Iris Species Classifier                   │
+│                    Two‑Tier ML Web Application                  │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
-│  ┌──────────┐    ┌──────────┐    ┌──────────┐                  │
-│  │   Data   │───▶│  Train   │───▶│  Model   │                  │
-│  │ (Iris)   │    │  Script  │    │  (.joblib)│                 │
-│  └──────────┘    └──────────┘    └────┬─────┘                  │
-│                                       │                          │
-│                                       ▼                          │
-│  ┌──────────────────────────────────────────────────┐          │
-│  │              Streamlit Web App                   │          │
-│  │  ┌────────────┐  ┌────────────┐  ┌───────────┐  │          │
-│  │  │   Input    │──│  Predict   │──│  Plotly   │  │          │
-│  │  │  Form      │  │  Engine    │  │  Charts   │  │          │
-│  │  └────────────┘  └────────────┘  └───────────┘  │          │
-│  └──────────────────────────────────────────────────┘          │
+│  ┌──────────────────────┐        ┌──────────────────────────┐  │
+│  │   🎨 Streamlit UI    │  POST  │    ⚙️ Flask API :5000    │  │
+│  │   (app.py)           │───────▶│    (flask_api.py)        │  │
+│  │                      │ JSON   │                          │  │
+│  │  ┌────────────────┐  │features│  ┌────────────────────┐  │  │
+│  │  │ Sepal sliders  │  │        │  │ RandomForest       │  │  │
+│  │  │ Petal sliders  │  │        │  │ model.pkl          │  │  │
+│  │  │ (4 inputs)     │  │        │  │ (191 KB)           │  │  │
+│  │  └────────────────┘  │        │  └────────────────────┘  │  │
+│  │         │             │        │           │               │  │
+│  │         ▼             │        │           ▼               │  │
+│  │  ┌────────────────┐  │◀───────│  { label, probabilities } │  │
+│  │  │ Plotly Bar     │  │  JSON  └──────────────────────────┘  │
+│  │  │ Chart          │  │                                      │
+│  │  └────────────────┘  │                                      │
+│  └──────────────────────┘                                      │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## ⚙️ Prerequisites
+## 📁 Project Structure
 
-| Tool | Version | Purpose |
-|------|---------|---------|
-| ![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white&style=flat) | 3.10+ | Runtime |
-| ![pip](https://img.shields.io/badge/pip-23.0%2B-green?logo=python&logoColor=white&style=flat) | 23.0+ | Package manager |
-| ![Docker](https://img.shields.io/badge/Docker-24.0%2B-blue?logo=docker&logoColor=white&style=flat) | 24.0+ | Containerization |
-| ![git](https://img.shields.io/badge/git-2.30%2B-orange?logo=git&logoColor=white&style=flat) | 2.30+ | Version control |
+```
+Iris-Model/
+├── README.md               ← You are here
+├── requirement.txt         ← Python dependencies (8 packages)
+├── app.py                  ← Streamlit frontend (UI + Plotly charts)
+├── flask_api.py            ← Flask REST backend (serves model)
+├── train.py                ← Model training script
+├── data/
+│   └── Iris.csv            ← Dataset (150 samples × 5 columns)
+└── model/
+    └── model.pkl           ← Serialized RandomForest model (191 KB)
+```
+
+> ⚠️ **Note:** `train.py` saves the model to `model/random_forest.pkl` while `flask_api.py` loads from `model/model.pkl`. Rename the output file after training or update `flask_api.py` to match.
+
+---
+
+## ✨ Features
+
+| Feature | Detail |
+|---------|--------|
+| 🎚️ **Interactive Sliders** | Adjust sepal/petal measurements via Streamlit sliders |
+| 🔗 **REST API** | Clean JSON contract between frontend & backend |
+| 📊 **Probability Visualization** | Plotly bar chart with per‑class confidence scores |
+| 🌐 **Separation of Concerns** | UI (`app.py`) and inference (`flask_api.py`) run independently |
+| 🧠 **Ensemble Model** | Random Forest — high accuracy, robust to overfitting |
+| 🎨 **Responsive Layout** | Two‑column slider grid with expandable info panel |
 
 ---
 
 ## 🛠️ Installation
 
-### Quick Start
+### Step 1 — Clone & Enter
 
 ```bash
-# 📥 Clone the repository
-git clone https://github.com/your-org/iris-model.git
-cd iris-model
-
-# 🪟 Create virtual environment
-python -m venv venv
-
-# 🍎/🐧 Activate environment
-source venv/bin/activate        # macOS/Linux
-venv\Scripts\activate           # Windows
-
-# 📦 Install dependencies
-pip install -r requirements.txt
+git clone <repo-url>
+cd Iris-Model
 ```
 
-### 🐳 Docker Deployment (Recommended)
+### Step 2 — Install Dependencies
 
 ```bash
-# Build and run
-docker-compose up --build
-
-# 🌐 Access at: http://localhost:8501
+pip install -r requirement.txt
 ```
+
+### 📦 Dependency Breakdown
+
+| Package | Purpose |
+|---------|---------|
+| `streamlit` | Web UI framework |
+| `flask` | REST API server |
+| `scikit-learn` | Model training & inference |
+| `plotly` | Interactive bar charts |
+| `pandas` | Data loading & manipulation |
+| `numpy` | Numerical operations |
+| `requests` | HTTP client (frontend → backend calls) |
+| `matplotlib` / `seaborn` | Exploratory data analysis & training visuals |
+
+---
+
+## 🚀 Usage
+
+### Terminal 1 — Start the Flask API
+
+```bash
+python flask_api.py
+```
+
+```
+ * Serving Flask app 'flask_api'
+ * Running on http://127.0.0.1:5000
+ * Debug mode: on
+```
+
+### Terminal 2 — Launch the Streamlit App
+
+```bash
+streamlit run app.py
+```
+
+### Browser — Predict
+
+Open **http://localhost:8501**. Use the sliders to set flower measurements, and the predicted species + probability chart appears instantly.
 
 ---
 
 ## 📊 Data
 
-### 📋 Dataset Overview
+**Source:** Classic Iris dataset (Fisher, 1936 — UCI Machine Learning Repository)
 
 | Property | Value |
 |----------|-------|
-| **Source** | UCI Machine Learning Repository |
-| **Samples** | 150 |
-| **Features** | 4 (sepal length/width, petal length/width) |
-| **Classes** | 3 (Setosa, Versicolor, Virginica) |
-| **File** | `data/iris.csv` |
+| Total samples | **150** |
+| Features | Sepal length, Sepal width, Petal length, Petal width |
+| Classes | **Setosa** (0), **Versicolor** (1), **Virginica** (2) |
+| Class balance | 50 samples per species (perfectly balanced) |
+| File | `data/Iris.csv` |
 
-### 📁 Data Structure
-
-```
-data/
-├── iris.csv          # Raw dataset
-└── processed/        # Preprocessed features (optional)
+**Label encoding** (in `train.py`):
+```python
+data['species'] = data['species'].map({
+    'setosa': 0,
+    'versicolor': 1,
+    'virginica': 2
+})
 ```
 
 ---
 
 ## 🤖 Model
 
-### 🧠 Model Specifications
-
-| Attribute | Details |
-|-----------|---------|
-| **Algorithm** | Support Vector Machine (SVM) |
-| **Kernel** | RBF (Radial Basis Function) |
-| **File** | `models/iris_svm.joblib` |
-| **Metadata** | `models/model_metadata.json` |
-| **Training Script** | `train.py` |
+| Attribute | Value |
+|-----------|-------|
+| **Algorithm** | Random Forest Classifier |
+| **Library** | scikit-learn `RandomForestClassifier()` |
+| **Default params** | 100 trees, Gini impurity, no max depth |
+| **Serialized file** | `model/model.pkl` (191 KB) |
+| **Train/test split** | 80% / 20% (`random_state=42`) |
 
 ---
 
-## 🎓 Training
+## 🎓 Training Pipeline
 
 ```bash
 python train.py
 ```
 
-### 📊 Training Pipeline
+```
+          Load               Split           Train              Evaluate
+            │                  │                │                   │
+Iris.csv ──▶ value_counts()   │                │                   │
+            │                  │                │                   │
+            ▼                  ▼                ▼                   ▼
+       label encode      80/20 split     RandomForest.fit()   accuracy_score()
+       (setosa→0)        (seed=42)           model.predict()     ypred print
+            │                  │                │                   │
+            │                  │                ▼                   │
+            │                  │        joblib.dump(model,
+            │                  │        'model/random_forest.pkl')
+```
+
+**Training output:**
+1. Prints class distribution (`data['species'].value_counts()`)
+2. Prints predicted labels on the test set
+3. Prints accuracy score (typically **~95–97%**)
+
+---
+
+## 🔌 API Reference
+
+### `GET /`
+
+Returns a welcome message.
 
 ```
-1️⃣ Load Data ──▶ 2️⃣ Preprocess ──▶ 3️⃣ Split (80/20) ──▶ 4️⃣ Train SVM ──▶ 5️⃣ Evaluate ──▶ 6️⃣ Save Model
+"Welcome to the Iris Flower Prediction API!"
 ```
 
-**What happens:**
-1. 📥 Load and preprocess the Iris dataset
-2. 📊 Split into train (80%) and test (20%) sets
-3. 🤖 Fit SVM classifier with RBF kernel
-4. 📈 Compute metrics (accuracy, precision, recall, F1)
-5. 💾 Save model and metadata to disk
+### `POST /predict`
+
+**Request:**
+```json
+{
+  "features": [5.1, 3.5, 1.4, 0.2]
+}
+```
+
+Feature order: `[sepal_length, sepal_width, petal_length, petal_width]`
+
+**Success Response (200):**
+```json
+{
+  "prediction": 0,
+  "label": "setosa",
+  "probabilities": {
+    "setosa": 0.97,
+    "versicolor": 0.02,
+    "virginica": 0.01
+  }
+}
+```
+
+**Error Response:**
+```json
+{ "error": "<error description>" }
+```
 
 ---
 
 ## 📈 Evaluation
 
-### 🎯 Performance Metrics
+<div align="center">
 
 | Metric | Value |
 |--------|-------|
-| **Accuracy** | ~96% |
-| **Precision** | Per-class detailed report |
-| **Recall** | Per-class detailed report |
-| **F1-Score** | Per-class detailed report |
-| **Confusion Matrix** | Visualized in reports |
-
-Results stored in: `reports/evaluation.json`
-
----
-
-## 🖥️ Demo
-
-### 🚀 Running the Streamlit App
-
-```bash
-streamlit run app.py
-```
-
-### 📱 What You Get
-
-| Feature | Description |
-|---------|-------------|
-| 📝 **Input Form** | Enter sepal/petal dimensions |
-| 🎯 **Instant Prediction** | Real-time species classification |
-| 📊 **Probability Chart** | Plotly bar graph showing confidence |
-| 🎨 **Interactive** | Hover for details, zoom to explore |
-
-<div align="center">
-
-**Expected Output:**
-```
-Predicted Species: **Iris-setosa**
-```
-With interactive probability visualization!
+| **Model** | Random Forest (default hyperparams) |
+| **Accuracy** | ~95–97% on 20% hold‑out set |
+| **Split seed** | `random_state=42` |
+| **Classes** | 3 (balanced: 10/test each) |
 
 </div>
 
----
-
-## ⚙️ Configuration
-
-### 📄 config.yaml
-
-```yaml
-model_path: "models/iris_svm.joblib"
-app_port: 8501
-debug: false
-```
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `MODEL_PATH` | Path to trained model | `models/iris_svm.joblib` |
-| `PORT` | App server port | `8501` |
-| `DEBUG` | Enable debug mode | `false` |
-
----
-
-## 📁 Project Structure
-
-```
-iris-model/
-├── 📄 README.md              # This file
-├── 📄 requirements.txt       # Python dependencies
-├── 📄 train.py              # Model training script
-├── 📄 app.py                # Streamlit application
-├── 📄 docker-compose.yml    # Docker orchestration
-├── 📄 config.yaml           # Configuration file
-├── 📁 data/                 # Dataset
-│   └── iris.csv
-├── 📁 models/               # Trained models
-│   └── iris_svm.joblib
-├── 📁 reports/              # Evaluation reports
-│   └── evaluation.json
-└── 📁 venv/                 # Virtual environment
-```
-
----
-
-## 🤝 Contributing
-
-<div align="center">
-
-**We welcome contributions! Here's how to help:**
-
-1. 🍴 **Fork** the repository
-2. 🌿 **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. ✅ **Test** your changes (`pytest`)
-4. 📤 **Push** and 🚀 **Submit** a Pull Request
-
-</div>
-
-Please read our [Code of Conduct](CODE_OF_CONDUCT.md) and [Contribution Guidelines](CONTRIBUTING.md).
+> Run `python train.py` to reproduce metrics — accuracy is printed at the end of training.
 
 ---
 
 ## 📜 License
 
-<p align="center">
-  <img src="https://img.shields.io/github/license/your-org/iris-model?style=for-the-badge&color=green" alt="License">
-</p>
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🙏 Acknowledgments
-
 <div align="center">
 
-| Project | Purpose |
-|---------|---------|
-| ![Plotly](https://img.shields.io/badge/Plotly-556195?style=for-the-badge&logo=plotly&logoColor=white) | Interactive visualizations |
-| ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white) | Web app framework |
-| ![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white) | Machine learning |
-| ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) | Containerization |
-| **UCI ML Repository** | Iris dataset source |
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-</div>
-
----
-
-## 📬 Support
-
-<div align="center">
-
-**Found a bug or have a feature request?**  
-Open an [Issue](https://github.com/your-org/iris-model/issues) on GitHub
-
-**Questions?**  
-Check the [Discussions](https://github.com/your-org/iris-model/discussions) tab
+This project is open‑source under the **MIT License**.
 
 </div>
 
@@ -337,15 +299,8 @@ Check the [Discussions](https://github.com/your-org/iris-model/discussions) tab
 
 <div align="center">
 
-# ⭐️ Show some love!
+### ⭐ Found this useful? Give it a star!
 
-**If this project helped you, please give it a ⭐️ Star!**
-
-![GitHub stars](https://img.shields.io/github/stars/your-org/iris-model?style=social&label=Stars)
-![GitHub forks](https://img.shields.io/github/forks/your-org/iris-model?style=social&label=Forks)
-
----
-
-*Made with ❤️ using Python, Streamlit, and Plotly*
+**Built with ❤️ using Python, Flask, Streamlit, and scikit-learn**
 
 </div>
