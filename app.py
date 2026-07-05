@@ -58,7 +58,7 @@ with col2:
 input_data = [sepal_length, sepal_width, petal_length, petal_width]
 
 # URL where my flask app is running 
-FLASK_URL = "https://project1-flask.onrender.com/predict"  # we will display the model predictions here 
+FLASK_URL = "http://127.0.0.1:5000/predict"  # we will display the model predictions here 
 
 # Generate predictions via Flask API 
 # Exception handling 

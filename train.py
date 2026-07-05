@@ -5,7 +5,7 @@ from sklearn.metrics import accuracy_score
 import joblib
 
 # Read CSV file
-data = pd.read_csv(r"C:\Users\ap422\Downloads\deployment_01\data\iris.csv")
+data = pd.read_csv(r"data/Iris.csv")
 print(data.head())
 
 # Check the distribution of species
